@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou.mapper.MedicineMapper">
+  <select id="findAllMedicine" resultType="drug">
+    select 
+      d.drug_num,
+      d.drug_url,
+      d.purchas_price,
+      d.sale_price,
+      d.drug_name,
+      d.drug_type,
+      d.simple_detail,
+      d.prodeced_date,
+      d.quality_date,
+      d.expiration_date,
+      d.detail,
+      d.manufacture,
+      d.use_infor,
+      d.total_stock,
+      d.status,
+      d.noted,
+      dis.medical_record,
+      dis.drug_num,
+      dis.dispens_num,
+      dis.alread_send_num,
+      dis.not_send_num,
+      d.total_stock - dis.alread_send_num as surplus,
+      dis.time
+    from dispensing dis,drug d where dis.drug_num = d.drug_num  
+      <if test="drug_name!=null and drug_name!=''">
+         and d.drug_name like '%${drug_name }%'
+      </if>
+      <if test="drug_type!=null and drug_type!=''">
+         and d.drug_type like '%${drug_type }%'
+      </if>
+  </select>
+  
+   <insert id="addDrug" parameterType="Drug">
+    insert into drug(drug_num,drug_url,purchas_price,sale_price,
+       drug_name,drug_type,simple_detail,prodeced_date,quality_date,
+       expiration_date,detail,manufacture,use_infor,total_stock,noted) 
+    values(#{drug_num},#{drug_url},#{purchas_price},#{sale_price},
+       #{drug_name},#{drug_type},#{simple_detail},#{prodeced_date},
+       #{quality_date},#{expiration_date},#{detail},#{manufacture},#{use_infor},
+       #{total_stock},#{noted})
+   </insert>
+   
+   <select id="destail" parameterType="String" resultType="Drug">
+    select 
+      d.drug_num,
+      d.drug_url,
+      d.purchas_price,
+      d.sale_price,
+      d.drug_name,
+      d.drug_type,
+      d.simple_detail,
+      d.prodeced_date,
+      d.quality_date,
+      d.expiration_date,
+      d.detail,
+      d.manufacture,
+      d.use_infor,
+      d.total_stock,
+      d.status,
+      d.noted,
+      dis.medical_record,
+      dis.drug_num,
+      dis.dispens_num,
+      dis.alread_send_num,
+      dis.not_send_num,
+      d.total_stock - dis.alread_send_num as surplus,
+      dis.time
+    from dispensing dis,drug d where dis.drug_num = d.drug_num and d.drug_num=#{drug_num}
+   </select>
+   
+   <update id="update" parameterType="drug">
+       update drug set
+      drug_num=#{drug_num},drug_url=#{drug_url},
+      purchas_price=#{purchas_price},sale_price=#{sale_price},
+      drug_name=#{drug_name},drug_type=#{drug_type},simple_detail=#{simple_detail},
+      prodeced_date=#{prodeced_date},quality_date=#{quality_date},
+      expiration_date=#{expiration_date},detail=#{detail},
+      manufacture=#{manufacture},use_infor=#{use_infor},
+      total_stock=#{total_stock},noted=#{noted} 
+       where drug_num=#{drug_num}
+   </update>
+
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou.mapper.PayItemsMapper">
+  <resultMap type="PayRegistrationChargeAssocation" id="findAll">
+      <id column="id" property="id"/>
+      <result column="charge_item_name" property="charge_item_name"/>
+      <result column="charge_item_name" property="charge_item_name"/>
+      <association property="chargeManager" javaType="ChargeManager">
+        <result column="charge_money" property="charge_money"/>
+        <result column="charge_time" property="charge_time"/>
+      </association>
+      <association property="registrationInfor" javaType="RegistrationInfor">
+        <result column="medical_record" property="medical_record"/>
+        <result column="name" property="name"/>
+      </association>
+  </resultMap>
+  <select id="findAll" parameterType="pay_itemsAccept" resultMap="findAll">
+      select 
+         p.id,p.charge_item_name,p.charge_item_name,
+         r.medical_record,
+         r.name,
+         c.charge_money,
+         c.charge_time
+      from pay_items p,registration_infor r,charge_manager c
+      where c.pay_items_id=p.id and c.medical_record=r.medical_record
+      <if test="medical_record != null and medical_record!=''">
+        and r.medical_record like '%${medical_record }%'
+      </if>
+      <if test="name != null and name != ''">
+        and r.name like '%${name }%'
+      </if>
+  </select>
+  
+  <insert id="add" parameterType="map">
+    insert into pay_items(charge_item_name,receivable_money) values(#{charge_item_name},#{receivable_money});
+  </insert>
+  
+  <select id="findPay_Items" resultType="PayItems">
+     select * from pay_items  
+  </select>
+  
+  <insert id="addCharge_Manager" parameterType="pay_itemsAccept">
+     insert into charge_manager(medical_record,pay_items_id,charge_money) values(#{medical_record},#{pay_items_id},#{charge_money})
+  </insert>
+  
+  
+</mapper>

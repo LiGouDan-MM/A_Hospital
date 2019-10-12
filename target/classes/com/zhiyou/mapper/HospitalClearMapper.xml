@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou.mapper.HospitalClearMapper">
+
+  <resultMap type="HospitalClearRegistration_inforAssocation" id="findAll">
+      <id column="id" property="id"/>
+      <result column="clear_status" property="clear_status"/>
+      <result column="cash_pledge" property="cash_pledge"/>
+      <result column="balance" property="balance"/>
+      <association property="registrationInfor" javaType="RegistrationInfor">
+        <result column="medical_record" property="medical_record"/>
+        <result column="name" property="name"/>
+      </association>
+  </resultMap>
+  <select id="find" parameterType="map" resultMap="findAll">
+     select 
+         h.id,
+         h.clear_status,
+         h.cash_pledge,
+         h.balance,
+         r.medical_record,
+         r.name
+     from registration_infor r,hospital_clear h
+     where h.medical_record=r.medical_record
+     <if test="medical_record !=null and medical_record !=''">
+      and  r.medical_record like '%${medical_record}%'
+     </if>
+     <if test="name != null and name !=''">
+      and  r.name like '%${name}%'
+     </if>
+  </select>
+  
+  
+  <resultMap type="Registration_InforPay_ItemsCharge_ManagerAssocation" id="detail">
+       <result column="medical_record" property="medical_record"/>
+       <result column="name" property="name"/>
+       <result column="total_cost" property="total_cost"/>
+       <result column="cash_pledge" property="cash_pledge"/>
+       <result column="balance" property="balance"/>
+       <collection property="a" ofType="A">
+          <result column="charge_money" property="charge_money"/>
+          <result column="charge_time" property="charge_time"/>
+          <result column="charge_item_name" property="charge_item_name"/>
+       </collection>
+  </resultMap>
+  <select id="detail" parameterType="Registration_InforPay_ItemsCharge_ManagerAssocation" resultMap="detail">
+    select 
+       r.medical_record,
+       r.name,
+       h.total_cost,
+       h.cash_pledge,
+       h.balance,
+       p.charge_item_name,
+       c.charge_money,
+       c.charge_time
+       from registration_infor r,pay_items p,charge_manager c,hospital_clear h
+       where r.medical_record=c.medical_record 
+             and h.medical_record=r.medical_record 
+             and c.pay_items_id=p.id 
+             and c.medical_record= #{medical_record}
+  </select>
+  <update id="colse" parameterType="int">
+    update hospital_clear set clear_status='已结算'  where id=#{id} and clear_status='未结算'
+  </update>
+
+</mapper>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table border="2">
+   <tr>
+      <td>id</td>
+      <td>
+         <input id="i1" >
+      </td>
+   </tr>
+   <tr>
+      <td>用户名</td>
+      <td><input id="i2"></td>
+   </tr>
+   <tr>
+      <td>密码</td>
+      <td><input id="i3"></td>
+   </tr>
+   <tr>
+      <td>邮箱</td>
+      <td><input id="i4"></td>
+   </tr>
+  
+</table>
+
+</body>
+<script type="text/javascript" src="Js/jquery-1.11.0.js"></script>
+<script type="text/javascript">
+    $("#i1").blur(function(){
+       var val = $("#i1").val();	
+    	$.ajax({
+    		url:"Check/findUserById",
+    		data:{"id":val},
+    		type:"GET",
+    		success:function(data){
+    			 $("#i2").val(data.obj.user_name)
+    			 $("#i3").val(data.obj.password)
+    			 $("#i4").val(data.obj.email)
+    		}
+    		
+    	});
+    	
+    });
+</script>
+</html>

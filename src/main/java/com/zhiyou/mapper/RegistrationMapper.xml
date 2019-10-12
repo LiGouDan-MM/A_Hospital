@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou.mapper.RegistrationMapper">
+  
+  <!--查所有  -->
+  <resultMap type="Registration_Infor" id="findAll">
+      <id column="id1" property="id"/>
+      <result column="medical_record" property="medical_record"/>
+      <result column="name" property="name"/>
+      <result column="certificate_type" property="certificate_type"/>
+      <result column="ID_num" property="ID_num"/>
+      <result column="social_safe_num" property="social_safe_num"/>
+      <result column="phone" property="phone"/>
+      <result column="self_paying" property="self_paying"/>
+      <result column="sex" property="sex"/>
+      <result column="career" property="career"/>
+      <result column="early_appointment" property="early_appointment"/>
+      <result column="doctor_id" property="doctor_id"/>
+      <result column="status" property="status"/>
+      <result column="noted" property="noted"/>
+      <result column="time" property="time"/>
+      <result column="section_id" property="section_id"/>
+      <result column="age" property="age"/>
+      <result column="registration_fee" property="registration_fee"/>
+      <result column="patientNum" property="patientNum"/>
+       <association property="doctor" javaType="Doctor">
+         <id column="id" property="id"></id>
+         <result column="name2" property="name"/>
+         <result column="certificate_type2" property="certificate_type"/>
+         <result column="ID_num2" property="ID_num"/>
+         <result column="phone2" property="phone"/>
+         <result column="special_plane" property="special_plane"/>
+         <result column="sex2" property="sex"/>
+         <result column="age2" property="age"/>
+         <result column="birther" property="birther"/>
+         <result column="email" property="email"/>
+         <result column="section_id2" property="section_id"/>
+         <result column="education" property="education"/>
+         <result column="noted2" property="noted"/>
+         <result column="time2" property="time"/>
+      </association>
+      <association property="section" javaType="Section">
+         <id column="id2" property="id"></id>
+         <result column="seccp_num" property="seccp_num"/>
+         <result column="secco_name" property="secco_name"/>
+      </association> 
+  </resultMap>
+  
+  <select id="queryall" parameterType="RegistrationAccept" resultMap="findAll">
+       select r.id id1,
+              r.medical_record,
+              r.name,
+              r.certificate_type,
+              r.ID_num,
+              r.social_safe_num,
+              r.phone,
+              r.self_paying,
+              r.patientNum,
+              r.sex,
+              r.career,
+              r.early_appointment,
+              r.doctor_id,
+              r.status,
+              r.noted,
+              r.time,
+              r.section_id,
+              r.age,
+              r.registration_fee,
+              d.id,
+              d.name name2,
+              d.certificate_type certificate_type2,
+              d.ID_num ID_num2,
+              d.phone phone2,
+              d.special_plane,
+              d.sex sex2,
+              d.age age2,
+              d.birther,
+              d.email,
+              d.section_id section_id2,
+              d.education,
+              d.noted noted2,
+              d.time time2,
+              s.id id2,
+              s.seccp_num,
+              s.secco_name
+       from registration_infor r,doctor d,section s where 
+       r.section_id=s.id and r.doctor_id = d.id
+       <if test="secco_name!=null and secco_name!=''">
+          and s.secco_name like '%${secco_name}%' 
+       </if>
+       <if test="medical_record!=null and medical_record!='' ">
+          and r.medical_record like '%${medical_record}%' 
+       </if>
+       <if test="docName!=null and docName!=''" >
+          and d.name like '%${docName}%'
+       </if>
+       <if test="(time1 !=null and time1!='') and (time2 &gt;time1) and (time2!=null and time2!='')">
+           and r.time &gt; #{time1} and r.time &lt; #{time2}
+       </if> 
+       limit #{preIndex},#{pageSize};
+     
+  </select>
+  <!-- 模糊查询的总条数 -->
+  <select id="getCount" parameterType="RegistrationAccept" resultType="int">
+    select count(*) from registration_infor r,doctor d,section s where 
+       r.section_id=s.id and r.doctor_id = d.id
+       <if test="secco_name!=null and secco_name!=''">
+          and s.secco_name like '%${secco_name}%' 
+       </if>
+       <if test="medical_record!=null and medical_record!=''">
+          and r.medical_record like '%${medical_record}%' 
+       </if>
+       <if test="docName!=null and docName!=''">
+          and d.name like '%${docName}%'
+       </if>
+       <if test="(time1 !=null and time1!='') and (time2 &gt;time1) and (time2!=null and time2!='')">
+           and r.time &gt; #{time1} and r.time &lt; #{time2}
+       </if> 
+  </select>
+  
+  <select id="getSection" resultType="Section">
+      select * from section;
+  </select>
+  
+  <select id="getDoctor" resultType="Doctor">
+      select * from doctor;
+  </select>
+  
+  <insert id="addRegistrationInfor" parameterType="RegistrationInfor">
+      insert into registration_infor(
+          name,certificate_type,
+          ID_num,social_safe_num,registration_fee,
+          phone,self_paying,sex,age,career,early_appointment,
+          section_id,doctor_id,noted
+      ) values(#{name},#{certificate_type},#{ID_num},
+        #{social_safe_num},#{registration_fee},#{phone},#{self_paying},
+        #{sex},#{age},#{career},#{early_appointment},#{section_id},#{doctor_id},#{noted})
+  </insert>
+  
+  <update id="updateRegistration_Infor" parameterType="RegistrationInfor">
+      update registration_infor set name=#{name},certificate_type=#{certificate_type},
+      ID_num=#{ID_num},social_safe_num=#{social_safe_num},registration_fee=#{registration_fee},
+      phone=#{phone},self_paying=#{self_paying},sex=#{sex},age=#{age},career=#{career},
+      early_appointment=#{early_appointment},section_id=#{section_id},doctor_id=#{doctor_id},
+      noted=#{noted} where id=#{id}
+  </update>
+  
+  <update id="back" parameterType="int">
+      update registration_infor set status='已退号' where id=#{id} and  status='已挂号'
+  </update>
+  
+  <delete id="Delete" parameterType="int">
+      delete  from registration_infor where id=#{a}
+  </delete>
+  
+
+</mapper>

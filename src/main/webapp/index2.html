@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>注册2,你没有见过的全新版本</h1>
+<form action="">
+  用户名: <input type="text" name="username" id="i1"><br/>
+  密码: <input type="text" name="password" id="i2"><br/>
+   <input type="submit"  value="注册" id="i3"><br/>
+  
+</form>
+</body>
+<script type="text/javascript" src="Js/jquery-1.11.0.js"></script>
+<script type="text/javascript">
+    // 绑定失去焦点事件
+    $("#i1").blur(function(){
+    	var val = $("#i1").val();
+    	alert(val);
+    	// 一步发送请求
+    	$.ajax({
+    		url:"Check/User2",
+    		type:"post",
+    		data:{"usernameJosn":val},
+    		success:function(msg){ //返回状态码
+    		   if (msg.code==200){
+    		        // 没查到,可以注册
+    		        $("#i3").removeAttr("disabled","disabled");
+    		        $("#s1").remove(); 
+    		        $("#i1").after("<span id='s1'>该用户名可以注册</span>");
+    		        $("#s1").css("color","green");
+    	        }else{
+    	        	//查到该用户,说明已注册
+    	        	$("#i3").removeAttr("disabled","disabled");
+    	        	$("#s1").remove(); 
+     		        $("#i1").after("<span id='s1'>该用户名已经注册</span>");
+     		        $("#s1").css("color","red");
+     		        $("#i3").attr("disabled","disabled");
+    	        }
+    		},
+    		error:function(){
+    			alert("服务器忙,稍后尝试");
+    		}
+    		
+    	});
+    	
+    });
+</script>
+</html>

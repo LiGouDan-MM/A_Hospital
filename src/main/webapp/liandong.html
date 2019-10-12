@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<select name="section" id="s1">
+    <option  value="1">骨科</option>
+    <option  value="2">急诊科</option>
+    <option  value="3">妇科</option>
+</select>
+<select name="doctor" id="s2">
+    <option></option>
+</select>
+
+</body>
+<script type="text/javascript" src="Js/jquery-1.11.0.js"></script>
+<script type="text/javascript">
+     $("#s1").change(function(){
+    	 var sectionID = $("#s1").val();
+    	 $.ajax({
+    		url:"Check/findDoctorBySectionID", 
+    		data:{"sectionId":sectionID},
+    		type:"GET",
+    		success:function(data){
+    			$("#s2").empty();
+    			for (var i=0;i<data.obj.length;i++){
+    				$("#s2").append("<option>"+data.obj[i].name+"</option>");
+    			}
+    		}
+    		
+    	 });
+     });
+
+</script>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+      <table border="2">
+          <tr>
+            <td>
+               <input type="checkbox" name="check" id="c1" onclick="checkall()"> 
+            </td>
+            <td>医生编号</td>
+            <td>姓名</td>
+          </tr>
+          <tr>
+            <td>
+               <input type="checkbox" name="check" value="001">
+            </td>
+            <td>001</td>
+            <td>张三</td>
+          </tr>
+          <tr>
+            <td>
+               <input type="checkbox" name="check" value="002">
+            </td>
+            <td>002</td>
+            <td>李思思</td>
+          </tr>
+      </table>
+      <button id="btn1" onclick="exportChecked()">导出已经选择的</button>
+</body>
+<script type="text/javascript" src="Js/jquery-1.11.0.js"></script>
+<script type="text/javascript">
+function checkall(){
+	var alls=document.getElementsByName("check");
+	var ch=document.getElementById("c1");
+	if(ch.checked){
+		for(var i=0;i<alls.length;i++){
+			alls[i].checked=true;	
+		}	
+	}else{
+		for(var i=0;i<alls.length;i++){
+			alls[i].checked=false;	
+		}	
+	}
+}
+
+  function exportChecked(){
+	  var IDArr = new Array();
+	  var alls=document.getElementsByName("check");
+	  for (var i=0;i<alls.length;i++){
+		  // 判断当前正在遍历的复选框是否选中
+		  if (alls[i].checked){
+			// 选中,获得value  
+			IDArr.push(alls[i].value);
+		  }
+	  }
+	  alert(IDArr);
+	  $.ajax({
+		  url:"Check/POI",
+		  data:{"IDArr":IDArr},
+		  traditiondal:true,
+		  type:"post",
+		  success:function(data){
+			  if (data.code==200){
+				  aldert("导出成功")
+			  }
+		  }
+		  
+	  });
+  }
+
+
+</script>
+</html>

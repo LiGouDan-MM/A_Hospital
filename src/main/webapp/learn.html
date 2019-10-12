@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+   <form action="Check/Delete">
+       <table border="2">
+          <tr>
+             <td>
+                <input type="checkbox" id="checkAll" onclick="checkall()">
+             </td>
+             <td>id</td>
+             <td>姓名</td>
+             <td>密码</td>
+          </tr> 
+          <tr>
+             <td>
+                <input type="checkbox" name="check" value="1001">
+             </td>
+             <td>1001</td>
+             <td>张三</td>
+             <td>021512</td>
+          </tr> 
+          <tr>
+             <td>
+               <input type="checkbox" name="check" value="1002">
+             </td>
+             <td>1002</td>
+             <td>李四</td>
+             <td>123456</td>
+          </tr> 
+          <tr>
+             <td>
+               <input type="checkbox" name="check" value="1003">
+             </td>
+             <td>1003</td>
+             <td>王五</td>
+             <td>215125</td>
+          </tr> 
+       </table>
+       <button type="submit">删除</button>
+    </form>
+</body>
+<script type="text/javascript">
+ function checkall(){
+	var arrs = document.getElementsByName("check"); 
+	var check = document.getElementById("checkAll");
+	if (check.checked){
+		for (var i=0;i<arrs.length;i++){
+			arrs[i].checked=true;
+		}
+	} else {
+		for (var i=0;i<arrs.length;i++) {
+			arrs[i].checked=false;
+		}
+	}
+ };
+ 
+
+
+</script>
+</html>

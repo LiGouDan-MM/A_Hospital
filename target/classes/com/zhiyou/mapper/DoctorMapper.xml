@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiyou.mapper.DoctorMapper">
+
+    <resultMap type="Doctor_CS" id="doctor">
+         <id column="id2" property="id"/>
+         <result column="name2" property="name"/>
+         <result column="section_id2" property="section_id"/>
+         <result column="certificate_type" property="certificate_type"/>
+         <result column="ID_num" property="ID_num"/>
+         <result column="phone" property="phone"/>
+         <result column="special_plane" property="special_plane"/>
+         <result column="sex" property="sex"/>
+         <result column="age" property="age"/>
+         <result column="birther" property="birther"/>
+         <result column="email" property="email"/>
+         <result column="education" property="education"/>
+         <result column="noted" property="noted"/>
+         <result column="time" property="time"/>
+         
+        <association property="section" javaType="Section">
+           <id column="id3" property="id"/>
+           <result column="seccp_num" property="seccp_num"/>
+           <result column="secco_name" property="secco_name"/>
+        </association>
+        
+        <association property="certificateType" javaType="CertificateType">
+           <id column="id4" property="id"/>
+           <result column="name4" property="name"/>
+        </association>
+    </resultMap>
+    <select id="findAll" parameterType="DoctorAccept" resultMap="doctor">
+       select d.id id2,
+              d.name name2,
+              d.certificate_type,
+              d.ID_num ,
+              d.phone,
+              d.special_plane,
+              d.sex,
+              d.age,
+              d.birther,
+              d.email,
+              d.section_id section_id2,
+              d.education,
+              d.noted,
+              d.time,
+              s.id id3,
+              s.seccp_num,
+              s.secco_name,
+              c.id id4,
+              c.name name4
+         from certificate_type c,doctor d,section s 
+         where d.certificate_type=c.id and s.id=d.section_id
+             <if test="id != null and id != ''">
+                and d.id like '%${id}%'
+             </if>
+             <if test="name != null and name != ''">
+                and d.name like '%${name}%'
+             </if>
+             <if test="secco_name !=null and secco_name !=''">
+                and s.secco_name like '%${secco_name}%'
+             </if>
+    </select>
+    
+    
+    <resultMap type="Doctor_CS" id="findById">
+         <id column="id2" property="id"/>
+         <result column="name2" property="name"/>
+         <result column="section_id2" property="section_id"/>
+         <result column="certificate_type" property="certificate_type"/>
+         <result column="ID_num" property="ID_num"/>
+         <result column="phone" property="phone"/>
+         <result column="special_plane" property="special_plane"/>
+         <result column="sex" property="sex"/>
+         <result column="age" property="age"/>
+         <result column="birther" property="birther"/>
+         <result column="email" property="email"/>
+         <result column="education" property="education"/>
+         <result column="noted" property="noted"/>
+         <result column="time" property="time"/>
+         
+        <association property="section" javaType="Section">
+           <id column="id3" property="id"/>
+           <result column="seccp_num" property="seccp_num"/>
+           <result column="secco_name" property="secco_name"/>
+        </association>
+        
+        <association property="certificateType" javaType="CertificateType">
+           <id column="id4" property="id"/>
+           <result column="name4" property="name"/>
+        </association>
+    </resultMap>
+    <select id="fingById" parameterType="int" resultMap="findById">
+       select d.id id2,
+              d.name name2,
+              d.certificate_type,
+              d.ID_num ,
+              d.phone,
+              d.special_plane,
+              d.sex,
+              d.age,
+              d.birther,
+              d.email,
+              d.section_id section_id2,
+              d.education,
+              d.noted,
+              d.time,
+              s.id id3,
+              s.seccp_num,
+              s.secco_name,
+              c.id id4,
+              c.name name4
+         from certificate_type c,doctor d,section s where
+         d.certificate_type=c.id and s.id=d.section_id and d.id=#{id};
+    </select>
+    
+    <select id="findCertificateType" resultType="CertificateType">
+        select * from certificate_type
+    </select>
+    <select id="findSection" resultType="Section">
+        select * from section
+    </select>
+    
+    <insert id="addDoctor" parameterType="Doctor">
+        insert into doctor(name,certificate_type,ID_num,phone,special_plane,
+        sex,birther,age,email,section_id,education,noted) 
+        values(#{name},#{certificate_type},#{ID_num},#{phone},#{special_plane},
+        #{sex},#{birther},#{age},#{email},#{section_id},#{education},#{noted});
+    </insert>
+    
+    <update id="updateDoctor" parameterType="Doctor">
+        update doctor set name=#{name},certificate_type=#{certificate_type},
+        ID_num=#{ID_num},phone=#{phone},special_plane=#{special_plane},
+        sex=#{sex},birther=#{birther},age=#{age},email=#{email},
+        section_id=#{section_id},education=#{education},noted=#{noted}
+        where id=#{id}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from doctor where id = #{id}
+    </delete>
+
+</mapper>

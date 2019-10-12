@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+        <!-- 配置适用于 注解开发的适配器和映射器 -->
+        <mvc:annotation-driven></mvc:annotation-driven>
+        <!-- 静态资源映射 -->
+        <mvc:default-servlet-handler/> 
+        <!--
+                            开启扫描使注解生效
+                            扫描哪一个有注解的包
+         -->
+        <context:component-scan base-package="com.zhiyou.controller">
+            <!-- 只扫描@Controller -->
+            <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        </context:component-scan>
+        
+         <!-- 上传文件组件 -->
+        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+           <property name="maxUploadSize" value="1000000"></property>
+        </bean>
+        
+        <!-- 视图解析 -->
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+          <!-- 视图解析的前缀  /就是根目录
+               如果页面放在WEB-INF下    /WEB-INF/
+           -->
+            <property name="prefix" value="/"></property>
+            <property name="suffix" value=".jsp"></property>
+        </bean>
+        
+</beans>     

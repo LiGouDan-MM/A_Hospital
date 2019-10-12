@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+       MyBatis的全局配置文件的各个节点要按照顺序
+    -->
+    <!-- jdbc.properties文件交给spring加载 -->  
+     
+    <typeAliases>
+       <package name="com.zhiyou.model"></package>
+       <package name="com.zhiyou.modelAccept"></package>
+       <package name="com.zhiyou.modelAssocation"></package>
+    </typeAliases>
+   
+    <!-- 数据源交给Spring托管 -->
+	<!-- 加载映射文件 -->
+	<!-- mapper加载交给spring -->
+</configuration>
